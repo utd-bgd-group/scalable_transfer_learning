@@ -1,2 +1,3 @@
 # scalable_transfer_learning
-Big Data Final Project 
+Big Data Final Project
+Readme updated
