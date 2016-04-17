@@ -13,4 +13,11 @@ export PATH=$PYTHONHOME/bin:$PATH
 ```bash
 spark-submit wordcount.py
 ```
+
+Or specify more parameters like:
+
+```bash
+spark-submit --master yarn-cluster --verbose --executor-memory 4G --executor-cores 7 --num-executors 6 wordcount.py
+```
+
 You can further configure spark, see [Submitting Applications](http://spark.apache.org/docs/latest/submitting-applications.html)
