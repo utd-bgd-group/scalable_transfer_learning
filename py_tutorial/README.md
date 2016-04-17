@@ -8,7 +8,7 @@ export PYTHONPATH=/opt/python-2.7.11
 export PATH=$PYTHONHOME/bin:$PATH
 ```
 
-* Go to the current working directory of your wordcount.py files, type
+## Go to the current working directory of your wordcount.py files, type
 in the following commands in the console:
 
 ```bash
