@@ -14,10 +14,9 @@ def get_sum(iterator):
 def main():
     rdd = sc.parallelize([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3)
     # rdd.foreachPartition(do something)
-    res = rdd.mapPartitions(get_sum, True).collect()
-  
-    resRdd = sc.parallelize(res)
-    resRdd.saveAsTextFile('hdfs://cshadoop1/kxh132430/py_test/out_1')
+    res = rdd.mapPartitions(get_sum, True) #.reduceByKey()
+    
+    res.saveAsTextFile('hdfs://cshadoop1/kxh132430/py_test/out_1')
 
 if __name__ == '__main__':
 	main()
