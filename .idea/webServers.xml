@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b9757327-012f-46d2-ae99-9a51e97f0faa" name="csgrads1.utdallas.edu" url="http://csgrads1.utdallas.edu">
+        <fileTransfer host="csgrads1.utdallas.edu" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/home/013/k/kx/kxh132430/workspace/project" accessType="SFTP" username="kxh132430" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
