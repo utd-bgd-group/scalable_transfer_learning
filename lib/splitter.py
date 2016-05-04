@@ -16,6 +16,7 @@ def computeMean(data):
                 mean[k] = v
     for (k, v) in mean.iteritems():
         mean[k] = v / len(data)
+    print mean
     return mean
 
 
@@ -81,11 +82,13 @@ def generateTrain(origdata, trainsize):
     return train, trainBeta, data
 
 
-def split(filename, train_size):
+def split(filename, train_size, reverse=False):
     data, meta = arff.loadarff(filename)
     orig_data = []
     for line in data:
         orig_data.append(list(line)[0:-1])
+    if reverse:
+        train_size = len(orig_data) - train_size
     return generateTrain(tuple(orig_data), train_size)
 
 
