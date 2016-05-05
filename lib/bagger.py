@@ -19,11 +19,11 @@ def cartesian(train, test, tr_n, te_n):
     return bags
 
 
-def pair(train, test, tr_n, te_n, k=10):
+def pair(train, test, tr_n, te_n, sample_no=10):
     bags = []
-    tr_bag_indices = np.random.choice(len(tr_n), k, replace=False)
-    te_bag_indices = np.random.choice(len(te_n), k, replace=False)
-    for i in range(k):
+    tr_bag_indices = np.random.choice(len(tr_n), sample_no, replace=False)
+    te_bag_indices = np.random.choice(len(te_n), sample_no, replace=False)
+    for i in range(sample_no):
         tr_idx = tr_n[tr_bag_indices[i]]
         te_idx = te_n[te_bag_indices[i]]
         bags.append((tr_idx, train[tr_idx], test[te_idx]))
