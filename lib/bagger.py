@@ -2,6 +2,24 @@ import numpy as np
 import math
 
 
+def get_size_no(data, bag_size, sample_no):
+    if bag_size:
+        if sample_no:
+            return bag_size, sample_no
+        else:
+            return bag_size, len(data) / bag_size
+    else:
+        if sample_no:
+            return len(data) / sample_no, sample_no
+        else:
+            return len(data), 1
+
+
+def partition(data, bag_size):
+    index = range(len(data))
+    return [index[i:i+bag_size] for i in xrange(0, len(index), bag_size)]
+
+
 def bag(data, size, sample_no):
     n = len(data)
     data_n = []
