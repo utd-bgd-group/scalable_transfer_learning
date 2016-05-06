@@ -13,13 +13,12 @@ from lib.evaluation import computeNMSE
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-b', "--bagging", type=int, choices=[1,2,3,4], default=1, help="bagging strategy")
-    parser.add_argument("-t", "--training", type=int, default=12000, help="size of trainning data")
+    parser.add_argument("-t", "--training", type=int, default=12000, help="size of training data")
     parser.add_argument("-r", "--reverse", action="store_true", help="set -t as the size of test data")
-    parser.add_argument("-s", "--bag_size", type=int, help="the sample size")
+    parser.add_argument("-s", "--tr_bsize", type=int, help="the sample size of train set")
+    parser.add_argument("-x", "--te_bsize", type=int, help="the sample size of test set")
     parser.add_argument("-m", "--train_samples", type=int, default=1, help="number of samples from training")
     parser.add_argument("-n", "--test_samples", type=int, default=1, help="number of samples from test")
-    parser.add_argument("-x", "--part_size", type=int, help="partition size for large train or test set")
-    parser.add_argument("-p", "--part_no", type=int, default=1, help="partition number for large train or test set")
     parser.add_argument("-i", "--input", type=str, default='./dataset/powersupply.arff', help="default input file")
     parser.add_argument("-o", "--output", type=str, default='./nmse.txt', help="default output file")
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose mode")
@@ -28,11 +27,10 @@ def main():
     mode = args.bagging # bagging strategy
     training_size = args.training # training set size (small training set)
     reverse = args.reverse # flip training to test (small test set)
-    bag_size = args.bag_size # By default, the bag size is dynamic, if specified, the bag size will fix
+    tr_bsize = args.tr_bsize # By default, the train bag size is dynamic, if specified, the train bag size will fix
+    te_bsize = args.te_bsize # By default, the test bag size is dynamic, if specified, the test bag size will fix
     m = args.train_samples # take m samples from training
     n = args.test_samples # take n samples from test
-    part_size = args.part_size
-    part_no = args.part_no
     input_file = args.input # input file path
     output_file = args.output # output file path
 
@@ -51,19 +49,16 @@ def main():
     start = time.time()
 
     # Bagging the train and test data from the sampled index
-    if mode == 1:  # if test is too big, provide x or p to partition test set
-        tr_bag_size, tr_bag_no = get_size_no(train_data, bag_size, m)
-        te_bag_size, te_bag_no = get_size_no(test_data, part_size, part_no)
+    tr_bag_size, tr_bag_no = get_size_no(train_data, tr_bsize, m)
+    te_bag_size, te_bag_no = get_size_no(test_data, te_bsize, n)
+
+    if mode == 1:  # if test is too big, provide x or n to partition test set
         tr_n = bag(train_data, size=tr_bag_size, sample_no=tr_bag_no)
-        te_n = partition(test_data, te_bag_size, te_bag_no)
-    elif mode == 2:  # if train is too big, provide x or p to partition train set
-        tr_bag_size, tr_bag_no = get_size_no(train_data, part_size, part_no)
-        te_bag_size, te_bag_no = get_size_no(test_data, bag_size, n)
-        tr_n = partition(train_data, tr_bag_size, tr_bag_no)
+        te_n = partition(test_data, part_size=te_bag_size, part_no=te_bag_no)
+    elif mode == 2:  # if train is too big, provide s or m to partition train set
+        tr_n = partition(train_data, part_size=tr_bag_size, part_no=tr_bag_no)
         te_n = bag(test_data, size=te_bag_size, sample_no=te_bag_no)
     else: # random sample, no partition
-        tr_bag_size, tr_bag_no = get_size_no(train_data, bag_size, m)
-        te_bag_size, te_bag_no = get_size_no(test_data, bag_size, n)
         tr_n = bag(train_data, size=tr_bag_size, sample_no=tr_bag_no)
         te_n = bag(test_data, size=te_bag_size, sample_no=te_bag_no)
 
