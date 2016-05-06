@@ -15,9 +15,9 @@ def get_size_no(data, bag_size, sample_no):
             return len(data), 1
 
 
-def partition(data, bag_size):
+def partition(data, part_size, part_no):
     index = range(len(data))
-    return [index[i:i+bag_size] for i in xrange(0, len(index), bag_size)]
+    return [index[i:i+part_size] for i in xrange(0, len(index), part_size)][:part_no]
 
 
 def bag(data, size, sample_no):
