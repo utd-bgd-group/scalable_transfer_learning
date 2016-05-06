@@ -5,22 +5,9 @@ import numpy as np
 import argparse
 import time
 from lib.splitter import split
-from lib.bagger import bag, pair, cartesian
+from lib.bagger import get_size_no, partition, bag, pair, cartesian
 from lib.kmm import computeBeta
 from lib.evaluation import computeNMSE
-
-
-def get_size_no(data, bag_size, sample_no):
-    if bag_size:
-        if sample_no:
-            return bag_size, sample_no
-        else:
-            return bag_size, len(data) / bag_size
-    else:
-        if sample_no:
-            return len(data) / sample_no, sample_no
-        else:
-            return len(data), 1
 
 
 def main():
@@ -62,13 +49,22 @@ def main():
     # Bagging the train and test data from the sampled index
     tr_bag_size, tr_bag_no = get_size_no(train_data, bag_size, m)
     te_bag_size, te_bag_no = get_size_no(test_data, bag_size, n)
-    tr_n = bag(train_data, size=tr_bag_size, sample_no=tr_bag_no)
-    te_n = bag(test_data, size=te_bag_size, sample_no=te_bag_no)
+
+    if mode == 1:  # if test is too big, provide n to partition test set
+        tr_n = bag(train_data, size=tr_bag_size, sample_no=tr_bag_no)
+        te_n = partition(test_data, te_bag_size)
+    elif mode == 2:  # if train is too big, provide m to partition train set
+        tr_n = partition(train_data, tr_bag_size)
+        te_n = bag(test_data, size=te_bag_size, sample_no=te_bag_no)
+    else:
+        tr_n = bag(train_data, size=tr_bag_size, sample_no=tr_bag_no)
+        te_n = bag(test_data, size=te_bag_size, sample_no=te_bag_no)
 
     if mode < 4:
         bags = cartesian(train_data, test_data, tr_n, te_n)
     else:
         bags = pair(train_data, test_data, tr_n, te_n, sample_no=min(tr_bag_no, te_bag_no))
+
     rdd = sc.parallelize(bags)
 
     end = time.time()
