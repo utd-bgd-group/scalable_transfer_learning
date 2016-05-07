@@ -23,7 +23,7 @@ def partition(data, part_size, part_no):
 def bag(data, size, sample_no):
     n = len(data)
     data_n = []
-    for i in range(min(sample_no, n / size)):
+    for i in range(sample_no):
         index = np.random.choice(n, size, False)
         data_n.append(index)
     return data_n
