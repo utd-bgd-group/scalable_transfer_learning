@@ -6,7 +6,7 @@ Generally, if the two datasets are unrelated, it is not possible to learn a good
 
 * X  is the set of features and Y is the class label. Note that P(X,Y) = P(Y|X) * P(X).
 
-In this scenario, it is possible to consider P(X_tr) = B * P(X_te).
+In this scenario, it is possible to consider P(X_te) = B * P(X_tr).
 
 * X_tr = data instances (covariates) from training data.
 
